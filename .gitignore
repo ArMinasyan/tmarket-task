@@ -34,5 +34,5 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
-/apps/email/env/.env.dev
-/apps/auth/env/.env.dev
+/apps/*/env/.env.dev
+/apps/*/env/.env.prod
