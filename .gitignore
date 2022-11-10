@@ -36,3 +36,4 @@ lerna-debug.log*
 
 /apps/*/env/.env.dev
 /apps/*/env/.env.prod
+/apps/file/storage

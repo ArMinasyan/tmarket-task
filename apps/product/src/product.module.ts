@@ -3,6 +3,10 @@ import { ProductController } from './product.controller';
 import { ProductService } from './product.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductEntity } from './entities/product.entity';
+import { RequestToService } from './requestToService';
+import { ClientsModule } from '@nestjs/microservices';
+import { microserviceProviders } from './microserviceProviders';
+import { ProductRepository } from './repositories/product.repository';
 
 @Module({
   imports: [
@@ -16,8 +20,16 @@ import { ProductEntity } from './entities/product.entity';
       entities: [ProductEntity],
     }),
     TypeOrmModule.forFeature([ProductEntity]),
+    ClientsModule.register(microserviceProviders),
   ],
   controllers: [ProductController],
-  providers: [ProductService],
+  providers: [
+    ProductService,
+    ProductRepository,
+    {
+      provide: 'REQUEST_TO_SERVICE',
+      useClass: RequestToService,
+    },
+  ],
 })
 export class ProductModule {}

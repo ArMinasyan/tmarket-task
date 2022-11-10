@@ -10,7 +10,7 @@ RUN yarn install
 
 COPY . .
 
-RUN yarn build gateway
+RUN yarn build product
 
 FROM node:alpine as production
 
@@ -27,4 +27,4 @@ COPY . .
 
 COPY --from=development /usr/src/app/dist ./dist
 
-CMD ["node", "dist/apps/gateway/main"]
+CMD ["node", "dist/apps/product/main"]

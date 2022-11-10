@@ -1,26 +1,47 @@
-import { Injectable, PipeTransform } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  PipeTransform,
+} from '@nestjs/common';
 
 @Injectable()
 export class FileTransformer implements PipeTransform {
   transform(value) {
-    const newFiles = {};
-    if (value && Object.keys(value).length > 0) {
-      const getValues = Object.values(value);
-      if (Array.isArray(getValues[0])) {
-        Object.keys(value).map((key) => {
-          newFiles[key] = {
-            buffer: value[key][0].buffer,
-            contentType: value[key][0].mimetype,
-          };
-        });
-      } else {
-        newFiles['buffer'] = value.buffer;
-        newFiles['contentType'] = value.mimetype;
-      }
-
-      return newFiles;
+    if (!['image/png', 'image/jpeg'].includes(value.mimetype)) {
+      throw new HttpException(
+        {
+          data: {},
+          validationError: {
+            property: 'image',
+            message: 'File can be only png or jpg',
+          },
+          success: false,
+          message: '',
+          statusCode: HttpStatus.BAD_REQUEST,
+        },
+        400,
+      );
     }
 
-    return newFiles;
+    if (value.size > 50000) {
+      throw new HttpException(
+        {
+          data: {},
+          validationError: {
+            property: 'image',
+            message: 'Filesize must 50kb or below',
+          },
+          success: false,
+          message: '',
+          statusCode: HttpStatus.BAD_REQUEST,
+        },
+        400,
+      );
+    }
+
+    return {
+      buffer: value.buffer,
+    };
   }
 }

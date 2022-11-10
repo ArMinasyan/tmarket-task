@@ -29,6 +29,9 @@ export class ProductEntity {
   @Column()
   image: string;
 
+  @Column()
+  key: string;
+
   @CreateDateColumn()
   created_at?: Date;
 

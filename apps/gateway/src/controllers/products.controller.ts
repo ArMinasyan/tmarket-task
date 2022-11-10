@@ -20,12 +20,12 @@ import {
 import { RequestToService } from '../requestToService';
 import messagePatterns from '../message-patterns';
 import { ProductDto } from '../dtos/product.dto';
-import {
-  FileInterceptor,
-} from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { FileTransformer } from '../common/customValidators/FileTransformer';
-import { SetRole } from '../common/customDecorators/set-role.decorator';
 import { User } from '../common/customDecorators/user.decorator';
+import { ProductParamDto } from '../dtos/product-param.dto';
+import { UpdateProductDto } from '../dtos/update-product.dto';
+import { SetRole } from "../common/customDecorators/set-role.decorator";
 
 @ApiTags('Products')
 @Controller('products')
@@ -51,11 +51,11 @@ export class ProductsController {
 
   @ApiResponse({ status: 200 })
   @Get(':productId')
-  async getProductById(@Param() param, @Res() res) {
+  async getProductById(@Param() param: ProductParamDto, @Res() res) {
     try {
       const data = await this.requestToService.productRequest(
         messagePatterns.PRODUCT.GET_BY_ID,
-        { productId: param.productId },
+        { id: param.productId },
       );
       res.status(data.statusCode).json(data);
     } catch (e) {
@@ -78,7 +78,7 @@ export class ProductsController {
     try {
       const data = await this.requestToService.productRequest(
         messagePatterns.PRODUCT.CREATE,
-        payload,
+        { ...payload, sellerId: user.id, file },
       );
       res.status(data.statusCode).json(data);
     } catch (e) {
@@ -90,17 +90,17 @@ export class ProductsController {
   @ApiBearerAuth()
   @ApiResponse({ status: 200 })
   @Put(':productId')
-  @SetRole('seller')
+   @SetRole('seller')
   async updateProduct(
     @User() user,
-    @Body() payload: Partial<ProductDto>,
-    @Param() param,
+    @Body() payload: UpdateProductDto,
+    @Param() param: ProductParamDto,
     @Res() res,
   ) {
     try {
       const data = await this.requestToService.productRequest(
         messagePatterns.PRODUCT.UPDATE,
-        payload,
+        { id: param.productId, data: payload },
       );
       res.status(data.statusCode).json(data);
     } catch (e) {
@@ -111,18 +111,18 @@ export class ProductsController {
   @ApiBearerAuth()
   @ApiResponse({ status: 200 })
   @Delete(':productId')
-  @SetRole('seller')
+  //@SetRole('seller')
   async deleteProduct(
     @User() user,
-    @Body() payload: ProductDto,
-    @Param() param,
+    @Param() param: ProductParamDto,
     @Res() res,
   ) {
     try {
       const data = await this.requestToService.productRequest(
         messagePatterns.PRODUCT.DELETE,
-        payload,
+        { id: param.productId },
       );
+
       res.status(data.statusCode).json(data);
     } catch (e) {
       res.status(e.statusCode).json(e);

@@ -10,10 +10,7 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export default class AuthMiddleware implements NestMiddleware {
-  constructor(
-    private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly jwtService: JwtService) {}
 
   use(req: Request, res: Response, next: NextFunction) {
     const token =
@@ -24,7 +21,7 @@ export default class AuthMiddleware implements NestMiddleware {
     if (token) {
       try {
         req['user'] = this.jwtService.verify(token, {
-          secret: this.configService.get<string>('jwt_secret'),
+          secret: process.env.JWT_SECRET,
         });
         next();
       } catch (err) {

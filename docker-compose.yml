@@ -46,6 +46,36 @@ services:
       - /usr/src/app/node_modules
     networks:
       - net
+  file:
+    build:
+      context: .
+      dockerfile: ./apps/file/Dockerfile
+      target: development
+    command: npm run start:file
+    expose:
+      - 8083
+    ports:
+      - 8083:8083
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - net
+  product:
+    build:
+      context: .
+      dockerfile: ./apps/product/Dockerfile
+      target: development
+    command: npm run start:product
+    expose:
+      - 8084
+    ports:
+      - 8084:8084
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - net
   db:
     container_name: db
     image: postgres:latest

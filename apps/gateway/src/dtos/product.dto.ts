@@ -2,6 +2,7 @@ import { IsNumber } from 'class-validator';
 import validationMessages from '../common/helpers/validation.messages';
 import { IsEmptyString } from '../common/customValidators';
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 
 export class ProductDto {
   @ApiProperty()
@@ -9,11 +10,13 @@ export class ProductDto {
   name: string;
 
   @ApiProperty()
-  @IsNumber({}, { message: validationMessages.email })
+  @IsNumber({}, { message: validationMessages.number })
+  @Type(() => Number)
   categoryId: number;
 
   @ApiProperty()
-  @IsNumber({}, { message: validationMessages.email })
+  @IsNumber({}, { message: validationMessages.number })
+  @Type(() => Number)
   price: number;
 
   @ApiProperty({

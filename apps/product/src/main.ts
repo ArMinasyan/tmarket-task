@@ -8,7 +8,7 @@ import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
 import { ProductModule } from './product.module';
 
-const PORT = 8083;
+const PORT = 8084;
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice(ProductModule, {
