@@ -8,4 +8,11 @@ export const microserviceProviders: ClientsModuleOptions = [
       port: 8081,
     },
   },
+  {
+    name: 'PRODUCT_SERVICE',
+    transport: Transport.TCP,
+    options: {
+      port: 8083,
+    },
+  },
 ];

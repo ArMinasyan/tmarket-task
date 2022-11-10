@@ -6,7 +6,7 @@ import {
   ValidationError,
   ValidationPipe,
 } from '@nestjs/common';
-import { HttpExceptionFilter } from '../../common/exceptionFilters/http-exception.filter';
+import { HttpExceptionFilter } from './common/exceptionFilters/http-exception.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {

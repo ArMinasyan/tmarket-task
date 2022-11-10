@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { SignInDto } from './dtos/sign-in.dto';
 import { RequestToService } from './requestToService';
-import messagePatterns from '../../message-patterns';
+import messagePatterns from './message-patterns';
 import { SignUpDto } from './dtos/sign-up.dto';
 
 @Injectable()

@@ -1,18 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import {MailerService} from '@nestjs-modules/mailer'
-import { join } from "path";
+import { MailerService } from '@nestjs-modules/mailer';
+import { join } from 'path';
 @Injectable()
 export class EmailService {
-  constructor(private readonly mailerService: MailerService) {
+  constructor(private readonly mailerService: MailerService) {}
 
-  }
-
-  async sendRegistrationMessage(to: string, context: {}) {
+  async sendRegistrationMessage(to: string, context: any) {
     await this.mailerService.sendMail({
       from: '',
       to: to,
-      subject: "Confirm email address",
-      template: join(__dirname, "templates", "registration"),
+      subject: 'Confirm email address',
+      template: join(__dirname, 'templates', 'registration'),
       context,
     });
   }

@@ -1,10 +1,7 @@
 import { IsEmail, IsString, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsEmptyString,
-  IsPasswordMatch,
-} from '../../../common/customValidators';
-import validationMessages from '../../../common/helpers/validation.messages';
+import { IsEmptyString, IsPasswordMatch } from '../common/customValidators';
+import validationMessages from '../common/helpers/validation.messages';
 
 export class SignUpDto {
   @ApiProperty()

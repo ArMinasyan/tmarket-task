@@ -13,6 +13,7 @@
     "start:auth": "cross-env NODE_ENV=dev ts-node-dev --cls apps/auth/src/main.ts",
     "start:email": "cross-env NODE_ENV=dev ts-node-dev --cls apps/email/src/main.ts",
     "start:gateway": "ts-node-dev --cls apps/gateway/src/main.ts",
+    "start:product": "cross-env NODE_ENV=dev ts-node-dev --cls apps/product/src/main.ts",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",

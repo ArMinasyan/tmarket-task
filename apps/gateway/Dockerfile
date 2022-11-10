@@ -2,13 +2,15 @@ FROM node:alpine As development
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
+COPY package.json ./
+
+COPY yarn.lock ./
 
 RUN yarn install
 
 COPY . .
 
-RUN yarn build auth
+RUN yarn build gateway
 
 FROM node:alpine as production
 
@@ -19,10 +21,10 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN yarn install
+RUN ըառն install
 
 COPY . .
 
 COPY --from=development /usr/src/app/dist ./dist
 
-CMD ["node", "dist/apps/auth/main"]
+CMD ["node", "dist/apps/gateway/main"]

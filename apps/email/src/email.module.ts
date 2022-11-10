@@ -1,12 +1,10 @@
 import { Module } from '@nestjs/common';
 import { EmailController } from './email.controller';
 import { EmailService } from './email.service';
-import { EmailConfirmRepository } from '../../auth/src/repositories/email-confirm.repository';
 import { join } from 'path';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
-console.log(join(__dirname, 'templates'))
 @Module({
   imports: [
     MailerModule.forRootAsync({
