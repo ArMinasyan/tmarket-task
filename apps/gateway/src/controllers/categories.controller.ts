@@ -21,6 +21,7 @@ import { UpdateProductDto } from '../dtos/update-product.dto';
 import { SetRole } from '../common/customDecorators/set-role.decorator';
 import { CategoryParamDto } from '../dtos/category-param.dto';
 import { CategoryDto } from '../dtos/category.dto';
+import { UpdateCategoryDto } from "../dtos/update-category.dto";
 
 @ApiTags('Categories')
 @Controller('categories')
@@ -80,7 +81,7 @@ export class CategoriesController {
   @SetRole('seller')
   async updateCategory(
     @User() user,
-    @Body() payload: CategoryDto,
+    @Body() payload: UpdateCategoryDto,
     @Param() param: CategoryParamDto,
     @Res() res,
   ) {
