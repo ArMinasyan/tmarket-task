@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Inject,
   Param,
@@ -11,25 +10,21 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiConsumes,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RequestToService } from '../requestToService';
 import messagePatterns from '../message-patterns';
 import { ProductDto } from '../dtos/product.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileTransformer } from '../common/customValidators/FileTransformer';
 import { User } from '../common/customDecorators/user.decorator';
-import { ProductParamDto } from '../dtos/product-param.dto';
 import { UpdateProductDto } from '../dtos/update-product.dto';
 import { SetRole } from '../common/customDecorators/set-role.decorator';
+import { CategoryParamDto } from '../dtos/category-param.dto';
+import { CategoryDto } from '../dtos/category.dto';
 
-@ApiTags('Products')
-@Controller('products')
-export class ProductsController {
+@ApiTags('Categories')
+@Controller('categories')
+export class CategoriesController {
   constructor(
     @Inject('REQUEST_TO_SERVICE')
     private readonly requestToService: RequestToService,
@@ -37,10 +32,10 @@ export class ProductsController {
 
   @ApiResponse({ status: 200 })
   @Get()
-  async getProduct(@Res() res) {
+  async getCategory(@Res() res) {
     try {
       const data = await this.requestToService.productRequest(
-        messagePatterns.PRODUCT.GET_ALL,
+        messagePatterns.CATEGORY.GET_ALL,
         {},
       );
       res.status(data.statusCode).json(data);
@@ -50,12 +45,12 @@ export class ProductsController {
   }
 
   @ApiResponse({ status: 200 })
-  @Get(':productId')
-  async getProductById(@Param() param: ProductParamDto, @Res() res) {
+  @Get(':categoryId')
+  async getCategoryById(@Param() param: CategoryParamDto, @Res() res) {
     try {
       const data = await this.requestToService.productRequest(
-        messagePatterns.PRODUCT.GET_BY_ID,
-        { id: param.productId },
+        messagePatterns.CATEGORY.GET_BY_ID,
+        { id: param.categoryId },
       );
       res.status(data.statusCode).json(data);
     } catch (e) {
@@ -63,44 +58,15 @@ export class ProductsController {
     }
   }
 
-  @ApiConsumes('multipart/form-data')
   @ApiBearerAuth()
   @ApiResponse({ status: 201 })
-  @UseInterceptors(FileInterceptor('image'))
-  @SetRole('seller')
+ // @SetRole('seller')
   @Post()
-  async createProduct(
-    @User() user,
-    @Body() payload: ProductDto,
-    @UploadedFile(FileTransformer) file,
-    @Res() res,
-  ) {
+  async createCategory(@User() user, @Body() payload: CategoryDto, @Res() res) {
     try {
       const data = await this.requestToService.productRequest(
-        messagePatterns.PRODUCT.CREATE,
-        { ...payload, sellerId: user.id, file },
-      );
-      res.status(data.statusCode).json(data);
-    } catch (e) {
-      res.status(e.statusCode).json(e);
-    }
-  }
-
-  @ApiConsumes('multipart/form-data')
-  @ApiBearerAuth()
-  @ApiResponse({ status: 200 })
-  @Put(':productId')
-  @SetRole('seller')
-  async updateProduct(
-    @User() user,
-    @Body() payload: UpdateProductDto,
-    @Param() param: ProductParamDto,
-    @Res() res,
-  ) {
-    try {
-      const data = await this.requestToService.productRequest(
-        messagePatterns.PRODUCT.UPDATE,
-        { id: param.productId, data: payload },
+        messagePatterns.CATEGORY.CREATE,
+        { ...payload },
       );
       res.status(data.statusCode).json(data);
     } catch (e) {
@@ -110,19 +76,19 @@ export class ProductsController {
 
   @ApiBearerAuth()
   @ApiResponse({ status: 200 })
-  @Delete(':productId')
-  //@SetRole('seller')
-  async deleteProduct(
+  @Put(':categoryId')
+ // @SetRole('seller')
+  async updateCategory(
     @User() user,
-    @Param() param: ProductParamDto,
+    @Body() payload: CategoryDto,
+    @Param() param: CategoryParamDto,
     @Res() res,
   ) {
     try {
       const data = await this.requestToService.productRequest(
-        messagePatterns.PRODUCT.DELETE,
-        { id: param.productId },
+        messagePatterns.CATEGORY.UPDATE,
+        { id: param.categoryId, data: payload },
       );
-
       res.status(data.statusCode).json(data);
     } catch (e) {
       res.status(e.statusCode).json(e);

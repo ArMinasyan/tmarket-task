@@ -1,53 +1,51 @@
-import { HttpStatus, Inject, Injectable } from "@nestjs/common";
-import { RequestToService } from "./requestToService";
-import messagePatterns from "./message-patterns";
-import { ProductRepository } from "./repositories/product.repository";
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { RequestToService } from '../requestToService';
+import messagePatterns from '../message-patterns';
+import { ProductRepository } from '../repositories/product.repository';
 
 @Injectable()
 export class ProductService {
   constructor(
-    @Inject("REQUEST_TO_SERVICE")
+    @Inject('REQUEST_TO_SERVICE')
     private readonly requestToService: RequestToService,
-    private readonly productRepository: ProductRepository
-  ) {
-  }
+    private readonly productRepository: ProductRepository,
+  ) {}
 
   async responseMessage({
-                          statusCode = HttpStatus.OK,
-                          success = true,
-                          data = {},
-                          message = "",
-                          validationError = {}
-                        }) {
+    statusCode = HttpStatus.OK,
+    success = true,
+    data = {},
+    message = '',
+    validationError = {},
+  }) {
     return {
       statusCode: statusCode,
       success: success,
       data: data,
       message: message,
-      validationError: validationError
+      validationError: validationError,
     };
   }
 
   async getAll() {
     return this.responseMessage({
-      data: await this.productRepository.find()
+      data: await this.productRepository.find(),
     });
   }
 
   async getById(id: number) {
     return this.responseMessage({
-      data: (await this.productRepository.findOneBy({ id })) || {}
+      data: (await this.productRepository.findOneBy({ id })) || {},
     });
   }
-
 
   async createProduct(payload) {
     const uploadFile = await this.requestToService.fileRequest(
       messagePatterns.UPLOAD_FILE,
       {
         buffer: payload.file.buffer,
-        contentType: payload.file.contentType
-      }
+        contentType: payload.file.contentType,
+      },
     );
 
     const product = await this.productRepository.createProduct({
@@ -56,13 +54,13 @@ export class ProductService {
       price: payload.price,
       seller: payload.sellerId,
       image: uploadFile.data.location,
-      key: uploadFile.data.key
+      key: uploadFile.data.key,
     });
 
     return this.responseMessage({
       statusCode: HttpStatus.CREATED,
-      message: "Product is created",
-      data: product
+      message: 'Product is created',
+      data: product,
     });
   }
 
@@ -73,7 +71,7 @@ export class ProductService {
       return this.responseMessage({
         statusCode: HttpStatus.NOT_FOUND,
         success: false,
-        message: "Product not found"
+        message: 'Product not found',
       });
     }
 
@@ -82,12 +80,12 @@ export class ProductService {
       {
         ...(payload.name ? { name: payload.name } : {}),
         ...(payload.categoryId ? { category: payload.categoryId } : {}),
-        ...(payload.price ? { price: payload.price } : {})
-      }
+        ...(payload.price ? { price: payload.price } : {}),
+      },
     );
 
     return this.responseMessage({
-      message: "Product is updated"
+      message: 'Product is updated',
     });
   }
 
@@ -98,20 +96,20 @@ export class ProductService {
       return this.responseMessage({
         statusCode: HttpStatus.NOT_FOUND,
         success: false,
-        message: "Product not found"
+        message: 'Product not found',
       });
     }
 
     this.requestToService
       .fileRequest(messagePatterns.DELETE_FILE, {
-        key: product.key
+        key: product.key,
       })
       .then();
 
     await this.productRepository.softDelete({ id: productId });
 
     return this.responseMessage({
-      message: "Product is deleted"
+      message: 'Product is deleted',
     });
   }
 }

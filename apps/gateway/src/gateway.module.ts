@@ -3,7 +3,11 @@ import { GatewayService } from './gateway.service';
 import { ClientsModule } from '@nestjs/microservices';
 import { microserviceProviders } from './microserviceProviders';
 import { RequestToService } from './requestToService';
-import { AuthController, ProductsController } from './controllers';
+import {
+  AuthController,
+  ProductsController,
+  CategoriesController,
+} from './controllers';
 import AuthMiddleware from './common/middlewares/auth.middleware';
 import { JwtModule } from '@nestjs/jwt';
 
@@ -16,7 +20,7 @@ import { JwtModule } from '@nestjs/jwt';
       },
     }),
   ],
-  controllers: [AuthController, ProductsController],
+  controllers: [AuthController, ProductsController, CategoriesController],
   providers: [
     GatewayService,
     {
@@ -27,11 +31,14 @@ import { JwtModule } from '@nestjs/jwt';
 })
 export class GatewayModule {
   configure(consumer: MiddlewareConsumer): any {
-    consumer
-      .apply(AuthMiddleware)
-      .forRoutes(
-        { path: '/products', method: RequestMethod.POST },
-        { path: '/products', method: RequestMethod.PUT },
-      );
+    // consumer
+    //   .apply(AuthMiddleware)
+    //   .forRoutes(
+    //     { path: '/products', method: RequestMethod.POST },
+    //     { path: '/products', method: RequestMethod.PUT },
+    //     { path: '/products', method: RequestMethod.DELETE },
+    //     { path: '/categories', method: RequestMethod.POST },
+    //     { path: '/categories', method: RequestMethod.PUT },
+    //   );
   }
 }

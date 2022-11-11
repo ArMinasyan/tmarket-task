@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
-import { ProductService } from './product.service';
+import { ProductService } from '../services/product.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import messagePatterns from './message-patterns';
+import messagePatterns from '../message-patterns';
 
 @Controller()
 export class ProductController {
@@ -9,12 +9,12 @@ export class ProductController {
 
   @MessagePattern(messagePatterns.GET_ALL)
   getAll(@Payload() payload) {
-    return this.productService.getAll()
+    return this.productService.getAll();
   }
 
   @MessagePattern(messagePatterns.GET_BY_ID)
   getById(@Payload() payload) {
-    return this.productService.getById(payload.id)
+    return this.productService.getById(payload.id);
   }
 
   @MessagePattern(messagePatterns.CREATE)

@@ -6,4 +6,10 @@ export default {
   DELETE: 'deleteProduct',
   UPLOAD_FILE: 'uploadFile',
   DELETE_FILE: 'deleteFile',
+  CATEGORY: {
+    GET_ALL: 'getAllCategories',
+    GET_BY_ID: 'getCategoryById',
+    CREATE: 'createCategory',
+    UPDATE: 'updateCategory',
+  },
 };
