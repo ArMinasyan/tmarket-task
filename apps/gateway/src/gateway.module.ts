@@ -31,14 +31,14 @@ import { JwtModule } from '@nestjs/jwt';
 })
 export class GatewayModule {
   configure(consumer: MiddlewareConsumer): any {
-    // consumer
-    //   .apply(AuthMiddleware)
-    //   .forRoutes(
-    //     { path: '/products', method: RequestMethod.POST },
-    //     { path: '/products', method: RequestMethod.PUT },
-    //     { path: '/products', method: RequestMethod.DELETE },
-    //     { path: '/categories', method: RequestMethod.POST },
-    //     { path: '/categories', method: RequestMethod.PUT },
-    //   );
+    consumer
+      .apply(AuthMiddleware)
+      .forRoutes(
+        { path: '/products', method: RequestMethod.POST },
+        { path: '/products', method: RequestMethod.PUT },
+        { path: '/products', method: RequestMethod.DELETE },
+        { path: '/categories', method: RequestMethod.POST },
+        { path: '/categories', method: RequestMethod.PUT },
+      );
   }
 }

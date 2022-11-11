@@ -111,7 +111,7 @@ export class ProductsController {
   @ApiBearerAuth()
   @ApiResponse({ status: 200 })
   @Delete(':productId')
-  //@SetRole('seller')
+  @SetRole('seller')
   async deleteProduct(
     @User() user,
     @Param() param: ProductParamDto,
