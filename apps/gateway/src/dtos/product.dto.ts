@@ -3,6 +3,7 @@ import validationMessages from '../common/helpers/validation.messages';
 import { IsEmptyString } from '../common/customValidators';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
+import { Optional } from '@nestjs/common';
 
 export class ProductDto {
   @ApiProperty()
@@ -23,5 +24,6 @@ export class ProductDto {
     type: 'file',
     name: 'image',
   })
-  image: any;
+  @Optional()
+  image?: any;
 }

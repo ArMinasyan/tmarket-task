@@ -60,7 +60,7 @@ export class CategoriesController {
 
   @ApiBearerAuth()
   @ApiResponse({ status: 201 })
- @SetRole('seller')
+  @SetRole('seller')
   @Post()
   async createCategory(@User() user, @Body() payload: CategoryDto, @Res() res) {
     try {

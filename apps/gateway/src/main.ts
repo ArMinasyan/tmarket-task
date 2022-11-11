@@ -6,7 +6,6 @@ dotenv.config({
 });
 
 import { NestFactory } from '@nestjs/core';
-import * as formData from 'express-form-data';
 import { GatewayModule } from './gateway.module';
 import {
   HttpException,
@@ -20,10 +19,6 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(GatewayModule);
   app.useGlobalFilters(new HttpExceptionFilter());
-
-  app.use(formData.parse({ autoClean: true }));
-  app.use(formData.format());
-  app.use(formData.stream());
 
   app.useGlobalPipes(
     new ValidationPipe({

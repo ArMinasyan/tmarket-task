@@ -29,7 +29,11 @@ export class ProductService {
 
   async getAll() {
     return this.responseMessage({
-      data: await this.productRepository.find(),
+      data: await this.productRepository.find({
+        relations: {
+          category: true,
+        },
+      }),
     });
   }
 

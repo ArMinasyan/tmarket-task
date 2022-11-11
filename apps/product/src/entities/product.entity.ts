@@ -3,9 +3,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { CategoryEntity } from './category.entity';
 
 @Entity({
   name: 'products',
@@ -17,7 +20,8 @@ export class ProductEntity {
   @Column()
   name: string;
 
-  @Column()
+  @OneToOne(() => CategoryEntity)
+  @JoinColumn({ name: 'category_id' })
   category: number;
 
   @Column()
