@@ -10,14 +10,28 @@ import {
 } from './controllers';
 import AuthMiddleware from './common/middlewares/auth.middleware';
 import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import * as path from 'path';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: [
+        path.resolve(__dirname, '../env/.env.dev'),
+        path.resolve(__dirname, '../env/.env.prod'),
+      ],
+      isGlobal: true,
+    }),
     ClientsModule.register(microserviceProviders),
-    JwtModule.register({
-      signOptions: {
-        algorithm: 'HS256',
-      },
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: {
+          algorithm: 'HS256',
+        },
+      }),
     }),
   ],
   controllers: [AuthController, ProductsController, CategoriesController],

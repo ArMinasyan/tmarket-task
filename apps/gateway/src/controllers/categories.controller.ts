@@ -21,7 +21,7 @@ import { UpdateProductDto } from '../dtos/update-product.dto';
 import { SetRole } from '../common/customDecorators/set-role.decorator';
 import { CategoryParamDto } from '../dtos/category-param.dto';
 import { CategoryDto } from '../dtos/category.dto';
-import { UpdateCategoryDto } from "../dtos/update-category.dto";
+import { UpdateCategoryDto } from '../dtos/update-category.dto';
 
 @ApiTags('Categories')
 @Controller('categories')

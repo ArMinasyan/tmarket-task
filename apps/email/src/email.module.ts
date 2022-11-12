@@ -4,20 +4,31 @@ import { EmailService } from './email.service';
 import { join } from 'path';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import * as path from 'path';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: [
+        path.resolve(__dirname, '../env/.env.dev'),
+        path.resolve(__dirname, '../env/.env.prod'),
+      ],
+      isGlobal: true,
+    }),
     MailerModule.forRootAsync({
-      useFactory: async () => ({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
         transport: {
           host: 'smtp.gmail.com',
           auth: {
             type: 'OAuth2',
-            user: process.env.GOOGLE_USER,
-            clientId: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            accessToken: process.env.GOOGLE_ACCESS_TOKEN,
-            refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
+            user: configService.get<string>('GOOGLE_USER'),
+            clientId: configService.get<string>('GOOGLE_CLIENT_ID'),
+            clientSecret: configService.get<string>('GOOGLE_CLIENT_SECRET'),
+            accessToken: configService.get<string>('GOOGLE_ACCESS_TOKEN'),
+            refreshToken: configService.get<string>('GOOGLE_REFRESH_TOKEN'),
           },
         },
         template: {

@@ -6,6 +6,9 @@ import { UserRepository } from './repositories/user.repository';
 import { EmailConfirmRepository } from './repositories/email-confirm.repository';
 import { RequestToService } from './requestToService';
 import messagePatterns from '../../gateway/src/message-patterns';
+import { ConfigService } from '@nestjs/config';
+import { UserEntity } from './entities/user.entity';
+import { ConfirmEmailEntity } from './entities/confirm-email.entity';
 
 const rnd = (min, max) => {
   return Math.floor(Math.random() * (max - min) + min);
@@ -19,7 +22,20 @@ export class AuthService {
     private readonly emailConfirmRepository: EmailConfirmRepository,
     @Inject('REQUEST_TO_SERVICE')
     private readonly requestToService: RequestToService,
-  ) {}
+    private readonly configService: ConfigService,
+  ) {
+    console.log({
+      host: configService.get<string>('PG_HOST'),
+      port: configService.get<number>('PG_PORT'),
+      username: configService.get<string>('PG_USERNAME'),
+      password: configService.get<string>('PG_PASSWORD'),
+      database: configService.get<string>('PG_DB'),
+      type: 'postgres',
+      synchronize: configService.get<boolean>('PG_SYNC'),
+      logging: configService.get<boolean>('PG_LOGGING'),
+      entities: [UserEntity, ConfirmEmailEntity],
+    });
+  }
 
   async responseMessage({
     statusCode = HttpStatus.OK,

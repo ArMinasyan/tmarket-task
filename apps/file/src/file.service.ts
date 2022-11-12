@@ -2,16 +2,17 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { v5 as uuid } from 'uuid';
 import * as fs from 'fs';
 import * as path from 'path';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class FileService {
   private folderName;
 
-  constructor() {
+  constructor(private readonly configService: ConfigService) {
     const resolvedPath = path.resolve(
       __dirname,
       '../',
-      process.env.FOLDER_NAME,
+      this.configService.get<string>('FOLDER_NAME'),
     );
 
     if (!fs.existsSync(resolvedPath)) {

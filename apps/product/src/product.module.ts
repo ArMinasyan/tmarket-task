@@ -11,17 +11,32 @@ import { CategoryEntity } from './entities/category.entity';
 import { CategoryRepository } from './repositories/category.repository';
 import { CategoryController } from './controllers/category.controller';
 import { CategoryService } from './services/category.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import * as path from 'path';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      username: process.env.DATABASE_USERNAME,
-      password: process.env.DATABASE_PASSWORD,
-      port: parseInt(process.env.DATABASE_PORT),
-      database: process.env.DATABASE_DB,
-      synchronize: true,
-      entities: [ProductEntity, CategoryEntity],
+    ConfigModule.forRoot({
+      envFilePath: [
+        path.resolve(__dirname, '../env/.env.dev'),
+        path.resolve(__dirname, '../env/.env.prod'),
+      ],
+      isGlobal: true,
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        host: configService.get<string>('PG_HOST'),
+        port: configService.get<number>('PG_PORT'),
+        username: configService.get<string>('PG_USERNAME'),
+        password: configService.get<string>('PG_PASSWORD'),
+        database: configService.get<string>('PG_DB'),
+        type: 'postgres',
+        synchronize: configService.get<boolean>('PG_SYNC'),
+        logging: configService.get<boolean>('PG_LOGGING'),
+        entities: [ProductEntity, CategoryEntity],
+      }),
     }),
     TypeOrmModule.forFeature([ProductEntity, CategoryEntity]),
     ClientsModule.register(microserviceProviders),
