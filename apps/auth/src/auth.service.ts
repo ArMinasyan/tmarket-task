@@ -24,17 +24,6 @@ export class AuthService {
     private readonly requestToService: RequestToService,
     private readonly configService: ConfigService,
   ) {
-    console.log({
-      host: configService.get<string>('PG_HOST'),
-      port: configService.get<number>('PG_PORT'),
-      username: configService.get<string>('PG_USERNAME'),
-      password: configService.get<string>('PG_PASSWORD'),
-      database: configService.get<string>('PG_DB'),
-      type: 'postgres',
-      synchronize: configService.get<boolean>('PG_SYNC'),
-      logging: configService.get<boolean>('PG_LOGGING'),
-      entities: [UserEntity, ConfirmEmailEntity],
-    });
   }
 
   async responseMessage({
